@@ -5,16 +5,26 @@
 
 package model;
 
+import java.util.Observable;
+
 /**
  * 
  */
-public class Cell {
-
+public class Cell extends Observable {
+	private final boolean hasBomb;
+	
 	/**
 	 * 
 	 */
-	public Cell() {
-		//TODO
+	public Cell(boolean hasBomb) {
+		this.hasBomb = hasBomb;
+	}
+	
+	/**
+	 * 
+	 */
+	public void tick(){
+		
 	}
 
 }
