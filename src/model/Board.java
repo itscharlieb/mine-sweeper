@@ -11,7 +11,12 @@ package model;
 public class Board {
 	private static final int DEFAULT_WIDTH = 9;
 	private static final int DEFAULT_HEIGHT = 9;
-	private static final int DEFAULT_COMPLEXITY = 1; 
+	private static final int DEFAULT_COMPLEXITY = 1;
+        
+        /**
+        * Need to know number of mines, maybe complexity covers this?
+        */
+        private static final int DEFAULT_NUMBER_MINES = 12;
 	
 	private final Cell[][] cells;
 	
@@ -38,7 +43,7 @@ public class Board {
 	}
 	
 	/**
-	 * Constructs a 2d array of cells by randomly assinging some cells with bombs
+	 * Constructs a 2d array of cells by randomly assigning some cells with bombs
 	 * and some without. 
 	 * 
 	 * @param width
