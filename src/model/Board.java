@@ -51,9 +51,15 @@ public class Board {
 	 * @return 2d Cell array
 	 */
 	private Cell[][] generateCells(int width, int height, int complexity){
-		//TODO
+            //TODO
+            /*
+            * 1. determine number of mines, either calculating off complexity or using another variable
+            * 2. randomly place mines throughout board
+            * 3. calculate what number non-bomb cells should contain
+            * 4.
+            */   
 		
-		return null;
+            return null;
 	}
 	
 	/**
