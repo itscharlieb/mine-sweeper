@@ -12,19 +12,30 @@ import java.util.Observable;
  */
 public class Cell extends Observable {
 	private final boolean hasBomb;
+	private boolean isFlagged;
 	
 	/**
 	 * 
 	 */
 	public Cell(boolean hasBomb) {
 		this.hasBomb = hasBomb;
+		isFlagged = false;
 	}
-	
+
 	/**
-	 * 
+	 *
+	 * @return
 	 */
-	public void tick(){
-		
+	public boolean hasBomb(){
+		return hasBomb;
+	}
+
+	/**
+	 *
+	 * @return
+	 */
+	public boolean isFlagged(){
+		return isFlagged;
 	}
 
 }

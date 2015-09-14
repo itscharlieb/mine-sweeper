@@ -9,6 +9,8 @@ package model;
  * 
  */
 public class Game {
+	private int wins;
+	private int losses;
 
 	/**
 	 * 
@@ -17,4 +19,7 @@ public class Game {
 		//TODO
 	}
 
+	public Grid resetBoard(){
+		return null;
+	}
 }
