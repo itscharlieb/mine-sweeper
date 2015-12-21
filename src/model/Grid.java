@@ -5,10 +5,12 @@
 
 package model;
 
+import java.util.Observable;
+
 /**
  *
  */
-public class Grid {
+public class Grid extends Observable {
     private static final int DEFAULT_WIDTH = 9;
     private static final int DEFAULT_HEIGHT = 9;
     private static final int DEFAULT_COMPLEXITY = 1;
@@ -47,9 +49,13 @@ public class Grid {
      * @return 2d Cell array
      */
     private static Cell[][] generateCells(int width, int height, int complexity) {
-        //TODO
-
-        return null;
+        Cell[][] cs = new Cell[width][height];
+        for(int row = 0; row < height; row++){
+            for(int col = 0; col < width; col++){
+                cs[row][col] = new Cell(Math.random() < .25);
+            }
+        }
+        return cs;
     }
 
     /**
@@ -59,10 +65,8 @@ public class Grid {
      * @param y
      * @return true if the cell ticked has a bomb, false otherwise
      */
-    public boolean tickCell(int x, int y) {
-        if (x > cells[0].length || y > cells.length) {
-            throw new IllegalArgumentException("Can not tick a tile not on the grid dawg.");
-        }
+    public boolean tick(int x, int y) {
+        assertValidCoordinates(x, y);
 
         //TODO
         return false;
@@ -75,17 +79,8 @@ public class Grid {
      * @param y
      */
     public void flag(int x, int y) {
-
-    }
-
-    /**
-     * Sets the cell at (x, y) as being unflagged with a boomb.
-     *
-     * @param x
-     * @param y
-     */
-    public void unflag(int x, int y) {
-
+        assertValidCoordinates(x, y);
+        cells[x][y].toggleFlagged();
     }
 
     /**
@@ -94,12 +89,26 @@ public class Grid {
      * @return
      */
     public int numBombedNeighbors(int x, int y) {
-        //TODO
-
-        return 0;
+        int n = 0;
+        for(int row = (x-1 > 0 ? x-1 : 0); row < (x+1 < cells[0].length ? x+1 : cells[0].length); row++){
+            for(int col = y-1 > 0 ? y-1 : 0; col < (y+1 < cells.length ? y+1 : cells.length); col++){
+                if(row != x || col != y){
+                    if(cells[row][col].hasBomb()){
+                        n++;
+                    }
+                }
+            }
+        }
+        return n;
     }
 
     public Cell[][] cells() {
         return cells;
+    }
+
+    private void assertValidCoordinates(int x, int y){
+        if (x > cells[0].length || y > cells.length) {
+            throw new IllegalArgumentException("Can not click a tile not on the grid dawg.");
+        }
     }
 }

@@ -10,16 +10,16 @@ import java.util.Observable;
 /**
  * 
  */
-public class Cell extends Observable {
+public class Cell {
 	private final boolean hasBomb;
-	private boolean isFlagged;
+	private boolean flagged;
 	
 	/**
 	 * 
 	 */
 	public Cell(boolean hasBomb) {
 		this.hasBomb = hasBomb;
-		isFlagged = false;
+		flagged = false;
 	}
 
 	/**
@@ -30,12 +30,15 @@ public class Cell extends Observable {
 		return hasBomb;
 	}
 
+	public void toggleFlagged(){
+		flagged = !flagged;
+	}
+
 	/**
 	 *
 	 * @return
 	 */
-	public boolean isFlagged(){
-		return isFlagged;
+	public boolean flagged(){
+		return flagged;
 	}
-
 }

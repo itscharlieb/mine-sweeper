@@ -5,19 +5,34 @@
 
 package gui;
 
-import javax.swing.JFrame;
+import model.Game;
+import model.Grid;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * 
  */
 public class GameFrame extends JFrame {
-	private GridPanel gridPanel;
 
 	/**
 	 * 
 	 */
-	public GameFrame() {
-		//TODO
-	}
+	public GameFrame(Game game) {
+		JFrame frame = new JFrame("Minesweeper");
 
+		GridPanel gridPanel = new GridPanel(new Grid());
+
+		JButton startButton = new JButton("Start");
+		startButton.addActionListener(actionEvent -> game.resetBoard());
+
+		Container container = frame.getContentPane();
+		container.add(startButton, BorderLayout.NORTH);
+		container.add(gridPanel, BorderLayout.SOUTH);
+
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+	}
 }
