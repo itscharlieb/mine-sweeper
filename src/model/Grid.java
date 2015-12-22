@@ -90,9 +90,9 @@ public class Grid extends Observable {
      */
     public int numBombedNeighbors(int x, int y) {
         int n = 0;
-        for(int row = (x-1 > 0 ? x-1 : 0); row < (x+1 < cells[0].length ? x+1 : cells[0].length); row++){
-            for(int col = y-1 > 0 ? y-1 : 0; col < (y+1 < cells.length ? y+1 : cells.length); col++){
-                if(row != x || col != y){
+        for(int row = x-1; row < x+2; row++){
+            for(int col = y-1; col < y+2; col++){
+                if(validCoordinates(row, col) && (row != x || col != y)){
                     if(cells[row][col].hasBomb()){
                         n++;
                     }
@@ -107,8 +107,12 @@ public class Grid extends Observable {
     }
 
     private void assertValidCoordinates(int x, int y){
-        if (x > cells[0].length || y > cells.length) {
+        if (!validCoordinates(x, y)) {
             throw new IllegalArgumentException("Can not click a tile not on the grid dawg.");
         }
+    }
+
+    private boolean validCoordinates(int x, int y){
+        return x >= 0 && x < cells.length && y >= 0 && y < cells[0].length;
     }
 }

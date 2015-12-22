@@ -5,21 +5,30 @@
 
 package model;
 
+import java.util.Observable;
+
 /**
  * 
  */
-public class Game {
+public class Game extends Observable {
 	private int wins;
 	private int losses;
+	private Grid grid;
 
 	/**
-	 * 
+	 *
 	 */
 	public Game() {
-		//TODO
+		grid = new Grid();
 	}
 
-	public Grid resetBoard(){
-		return null;
+	public Grid grid(){
+		return grid;
+	}
+
+	public void newGame(){
+		grid = new Grid();
+		setChanged();
+		notifyObservers(this);
 	}
 }

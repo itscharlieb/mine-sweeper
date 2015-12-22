@@ -5,7 +5,6 @@
 
 package gui;
 
-import model.Cell;
 import model.Grid;
 
 import javax.imageio.ImageIO;
@@ -13,7 +12,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
 
 /**
@@ -21,28 +19,26 @@ import java.io.File;
  */
 public class GridPanel extends JPanel {
 	private Grid grid;
-	private ImageIcon boardImage;
 
 	/**
 	 * 
 	 */
 	public GridPanel(Grid grid) {
 		this.grid = grid;
-		Cell[][] cells = grid.cells();
 		loadImage(grid);
         addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				int x = getXCoordinate(e);
-				int y = getYCoordinate(e);
+				int row = getRow(e);
+				int col = getCol(e);
 
 				if (SwingUtilities.isLeftMouseButton(e)) {
-					grid.tick(x, y);
+					grid.tick(row, col);
 				}
 
-				//left click - disregarding middle mouse click as an option
+				//right click - disregarding middle mouse click as an option
 				else {
-					grid.flag(x, y);
+					grid.flag(row, col);
 				}
 			}
 		});
@@ -63,8 +59,8 @@ public class GridPanel extends JPanel {
 		}
 
 		setLayout(new GridLayout(grid.cells()[0].length, grid.cells().length));
-		for(int row = 0; row < grid.cells()[0].length; row++){
-			for(int col = 0; col < grid.cells().length; col++){
+		for(int row = 0; row < grid.cells().length; row++){
+			for(int col = 0; col < grid.cells()[0].length; col++){
 				if(grid.cells()[row][col].hasBomb()){
 					add(new JLabel(new ImageIcon(bomb)));
 				}
@@ -80,8 +76,8 @@ public class GridPanel extends JPanel {
 	 * @param e
 	 * @return
 	 */
-	private int getXCoordinate(MouseEvent e){
-		return e.getX() / (this.getWidth() / grid.cells()[0].length);
+	private int getRow(MouseEvent e){
+		return e.getY() / (this.getHeight() / grid.cells().length);
 	}
 
 	/**
@@ -89,7 +85,7 @@ public class GridPanel extends JPanel {
 	 * @param e
 	 * @return
 	 */
-	private int getYCoordinate(MouseEvent e){
-		return e.getY() % (this.getHeight() / grid.cells().length);
+	private int getCol(MouseEvent e){
+		return e.getX() / (this.getWidth() / grid.cells()[0].length);
 	}
 }

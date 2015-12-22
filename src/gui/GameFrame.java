@@ -10,22 +10,27 @@ import model.Grid;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * 
  */
-public class GameFrame extends JFrame {
+public class GameFrame extends JFrame implements Observer {
+	JFrame frame;
+	GridPanel gridPanel;
 
 	/**
 	 * 
 	 */
 	public GameFrame(Game game) {
-		JFrame frame = new JFrame("Minesweeper");
+		game.addObserver(this);
+		frame = new JFrame("Minesweeper");
 
-		GridPanel gridPanel = new GridPanel(new Grid());
+		gridPanel = new GridPanel(game.grid());
 
-		JButton startButton = new JButton("Start");
-		startButton.addActionListener(actionEvent -> game.resetBoard());
+		JButton startButton = new JButton("Restart");
+		startButton.addActionListener(actionEvent -> game.newGame());
 
 		Container container = frame.getContentPane();
 		container.add(startButton, BorderLayout.NORTH);
@@ -34,5 +39,17 @@ public class GameFrame extends JFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
+	}
+
+
+	@Override
+	public void update(Observable o, Object arg) {
+		Game game = (Game)o;
+		Container container = frame.getContentPane();
+		container.remove(gridPanel);
+		gridPanel = new GridPanel(game.grid());
+		container.add(gridPanel);
+		container.revalidate();
+		container.repaint();
 	}
 }
