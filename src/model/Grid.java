@@ -5,12 +5,14 @@
 
 package model;
 
-import java.util.Observable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  *
  */
-public class Grid extends Observable {
+public class Grid {
     private static final int DEFAULT_WIDTH = 9;
     private static final int DEFAULT_HEIGHT = 9;
     private static final int DEFAULT_COMPLEXITY = 1;
@@ -67,8 +69,12 @@ public class Grid extends Observable {
      */
     public boolean tick(int x, int y) {
         assertValidCoordinates(x, y);
+        if(cells[x][y].hasBomb()){
+            return true;
+        }
 
-        //TODO
+        cells[x][y].setTicked();
+        //TODO bfs
         return false;
     }
 
@@ -89,17 +95,20 @@ public class Grid extends Observable {
      * @return
      */
     public int numBombedNeighbors(int x, int y) {
-        int n = 0;
+        assertValidCoordinates(x, y);
+        return (int)neighbors(x, y).stream().filter(coords -> cells[coords.X][coords.Y].hasBomb()).count();
+    }
+
+    private Collection<Coordinates> neighbors(int x, int y){
+        List<Coordinates> neighbors = new ArrayList<>();
         for(int row = x-1; row < x+2; row++){
             for(int col = y-1; col < y+2; col++){
                 if(validCoordinates(row, col) && (row != x || col != y)){
-                    if(cells[row][col].hasBomb()){
-                        n++;
-                    }
+                    neighbors.add(new Coordinates(row, col));
                 }
             }
         }
-        return n;
+        return neighbors;
     }
 
     public Cell[][] cells() {
@@ -114,5 +123,14 @@ public class Grid extends Observable {
 
     private boolean validCoordinates(int x, int y){
         return x >= 0 && x < cells.length && y >= 0 && y < cells[0].length;
+    }
+
+    class Coordinates{
+        final int X;
+        final int Y;
+        Coordinates(int x, int y){
+            X = x;
+            Y = y;
+        }
     }
 }

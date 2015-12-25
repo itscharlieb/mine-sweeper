@@ -5,6 +5,8 @@
 
 package gui;
 
+import model.Cell;
+import model.Game;
 import model.Grid;
 
 import javax.imageio.ImageIO;
@@ -18,14 +20,38 @@ import java.io.File;
  * Provides a grid for holding the mine-sweeper cells. 
  */
 public class GridPanel extends JPanel {
-	private Grid grid;
+    static ImageIcon FLAG;
+    static ImageIcon BOMB;
+    static ImageIcon EMPTY;
+    static {
+        try{
+            Image empty = ImageIO.read(new File("res/minesweeper.png"));
+            EMPTY = new ImageIcon(empty.getScaledInstance(24, 24, Image.SCALE_DEFAULT));
+
+            Image flag = ImageIO.read(new File("res/FLAG.png"));
+            FLAG = new ImageIcon(flag.getScaledInstance(24, 24, Image.SCALE_DEFAULT));
+
+            Image bomb = ImageIO.read(new File("res/BOMB.png"));
+            BOMB = new ImageIcon(bomb.getScaledInstance(24, 24, Image.SCALE_DEFAULT));
+        }
+        catch (Exception e){
+            System.out.println(e);
+            System.out.println("Failed to load image icons");
+        }
+    }
+
+    //TODO only need game for function calls
+    //could be better way than to store game instance
+	private Game game;
 
 	/**
 	 * 
 	 */
-	public GridPanel(Grid grid) {
-		this.grid = grid;
-		loadImage(grid);
+	public GridPanel(Game game) {
+		//TODO does it need Game instance?
+
+		this.game = game;
+		loadImage(game.grid());
         addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -33,43 +59,44 @@ public class GridPanel extends JPanel {
 				int col = getCol(e);
 
 				if (SwingUtilities.isLeftMouseButton(e)) {
-					grid.tick(row, col);
+					game.tick(row, col);
 				}
 
 				//right click - disregarding middle mouse click as an option
 				else {
-					grid.flag(row, col);
+					game.flag(row, col);
 				}
 			}
 		});
 	}
 
 	private void loadImage(Grid grid){
-		Image flag = null;
-		Image bomb = null;
-		try{
-			flag = ImageIO.read(new File("res/flag.png"));
-			flag = flag.getScaledInstance(24, 24, Image.SCALE_DEFAULT);
-
-			bomb = ImageIO.read(new File("res/bomb.png"));
-			bomb = bomb.getScaledInstance(24, 24, Image.SCALE_DEFAULT);
-		}
-		catch (Exception e){
-			System.out.println(e);
-		}
-
 		setLayout(new GridLayout(grid.cells()[0].length, grid.cells().length));
 		for(int row = 0; row < grid.cells().length; row++){
 			for(int col = 0; col < grid.cells()[0].length; col++){
-				if(grid.cells()[row][col].hasBomb()){
-					add(new JLabel(new ImageIcon(bomb)));
-				}
-				else{
-					add(new JLabel("" + grid.numBombedNeighbors(row, col)));
-				}
+                setIcon(grid.cells()[row][col], row, col);
 			}
 		}
 	}
+
+    private void setIcon(Cell cell, int row, int col){
+        if(cell.ticked()){
+            if(cell.hasBomb()){
+                add(new JLabel(BOMB));
+            }
+            else{
+                add(new JLabel("" + game.grid().numBombedNeighbors(row, col)));
+            }
+        }
+        else{
+            if(cell.flagged()){
+                add(new JLabel(FLAG));
+            }
+            else{
+                add(new JLabel(EMPTY));
+            }
+        }
+    }
 
 	/**
 	 *
@@ -77,7 +104,7 @@ public class GridPanel extends JPanel {
 	 * @return
 	 */
 	private int getRow(MouseEvent e){
-		return e.getY() / (this.getHeight() / grid.cells().length);
+		return e.getY() / (this.getHeight() / game.grid().cells().length);
 	}
 
 	/**
@@ -86,6 +113,6 @@ public class GridPanel extends JPanel {
 	 * @return
 	 */
 	private int getCol(MouseEvent e){
-		return e.getX() / (this.getWidth() / grid.cells()[0].length);
+		return e.getX() / (this.getWidth() / game.grid().cells()[0].length);
 	}
 }

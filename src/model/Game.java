@@ -26,6 +26,18 @@ public class Game extends Observable {
 		return grid;
 	}
 
+	public void tick(int x, int y){
+		grid.tick(x, y);
+        setChanged();
+        notifyObservers();
+	}
+
+	public void flag(int x, int y){
+		grid.flag(x, y);
+        setChanged();
+        notifyObservers();
+	}
+
 	public void newGame(){
 		grid = new Grid();
 		setChanged();

@@ -27,7 +27,8 @@ public class GameFrame extends JFrame implements Observer {
 		game.addObserver(this);
 		frame = new JFrame("Minesweeper");
 
-		gridPanel = new GridPanel(game.grid());
+		//TODO should grid need game?
+		gridPanel = new GridPanel(game);
 
 		JButton startButton = new JButton("Restart");
 		startButton.addActionListener(actionEvent -> game.newGame());
@@ -47,7 +48,7 @@ public class GameFrame extends JFrame implements Observer {
 		Game game = (Game)o;
 		Container container = frame.getContentPane();
 		container.remove(gridPanel);
-		gridPanel = new GridPanel(game.grid());
+		gridPanel = new GridPanel(game);
 		container.add(gridPanel);
 		container.revalidate();
 		container.repaint();

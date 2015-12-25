@@ -13,6 +13,7 @@ import java.util.Observable;
 public class Cell {
 	private final boolean hasBomb;
 	private boolean flagged;
+	private boolean ticked;
 	
 	/**
 	 * 
@@ -20,6 +21,7 @@ public class Cell {
 	public Cell(boolean hasBomb) {
 		this.hasBomb = hasBomb;
 		flagged = false;
+		ticked = false;
 	}
 
 	/**
@@ -32,6 +34,14 @@ public class Cell {
 
 	public void toggleFlagged(){
 		flagged = !flagged;
+	}
+
+	public void setTicked(){
+		ticked = true;
+	}
+
+	public boolean ticked(){
+		return ticked;
 	}
 
 	/**
