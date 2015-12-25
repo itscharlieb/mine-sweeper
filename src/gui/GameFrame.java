@@ -6,7 +6,6 @@
 package gui;
 
 import model.Game;
-import model.Grid;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,8 +32,16 @@ public class GameFrame extends JFrame implements Observer {
 		JButton startButton = new JButton("Restart");
 		startButton.addActionListener(actionEvent -> game.newGame());
 
+        JLabel wins = new JLabel("Wins = [" + game.wins() + "]");
+        JLabel losses = new JLabel("Losses = [" + game.losses() + "]");
+
+        JComponent info = new JTabbedPane();
+        info.add(startButton);
+        info.add(wins);
+        info.add(losses);
+
 		Container container = frame.getContentPane();
-		container.add(startButton, BorderLayout.NORTH);
+		container.add(info, BorderLayout.NORTH);
 		container.add(gridPanel, BorderLayout.SOUTH);
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,7 +52,10 @@ public class GameFrame extends JFrame implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
+        Game.GameState state = (Game.GameState) arg;
 		Game game = (Game)o;
+        //TODO fuck with win/loss labels
+
 		Container container = frame.getContentPane();
 		container.remove(gridPanel);
 		gridPanel = new GridPanel(game);
